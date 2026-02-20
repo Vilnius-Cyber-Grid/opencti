@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: OpenCTI Documentation
+    url: https://docs.opencti.io
+    about: Official OpenCTI documentation and guides
+  - name: OpenCTI Community (Discord)
+    url: https://discord.gg/opencti
+    about: Ask questions and get help from the OpenCTI community

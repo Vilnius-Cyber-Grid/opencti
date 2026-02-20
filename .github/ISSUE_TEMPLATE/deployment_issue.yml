@@ -1,0 +1,84 @@
+name: Deployment / Configuration Issue
+description: Report a problem with deploying or configuring the OpenCTI stack
+title: "[Deployment]: "
+labels: ["deployment", "configuration"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for issues related to Docker Compose, environment configuration, or initial setup.
+
+  - type: dropdown
+    id: stage
+    attributes:
+      label: Deployment Stage
+      description: At which stage does the issue occur?
+      options:
+        - Initial setup / first start
+        - Service startup (docker compose up)
+        - Service health checks
+        - Upgrade / migration
+        - Network / connectivity
+        - Environment variable configuration
+        - LDAP / authentication setup
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Issue Description
+      description: Describe the deployment or configuration problem.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      placeholder: |
+        1. Run `docker compose up -d`
+        2. Check logs with `docker compose logs ...`
+        3. Observe error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: error_output
+    attributes:
+      label: Error Output / Logs
+      description: Paste the error or log output (sanitize passwords, tokens, and API keys).
+      render: shell
+
+  - type: textarea
+    id: env_snippet
+    attributes:
+      label: Relevant .env Configuration (sanitized)
+      description: Share the relevant parts of your `.env` file with all secrets replaced by placeholders.
+      render: shell
+
+  - type: input
+    id: opencti_version
+    attributes:
+      label: OpenCTI Version
+      placeholder: e.g. 6.x.x
+    validations:
+      required: true
+
+  - type: input
+    id: host_os
+    attributes:
+      label: Host OS
+      placeholder: e.g. Ubuntu 22.04, macOS 15
+
+  - type: input
+    id: docker_version
+    attributes:
+      label: Docker / Docker Compose Version
+      placeholder: e.g. Docker 27.x, Compose 2.x
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
