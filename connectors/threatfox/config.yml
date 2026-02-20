@@ -1,0 +1,17 @@
+connector:
+  id: "threatfox-connector-01"
+  type: "EXTERNAL_IMPORT"
+  name: "ThreatFox"
+  scope: "indicator"
+  confidence_level: 80
+  update_existing_data: true
+  log_level: "info"
+
+opencti:
+  url: "http://10.10.88.200:8080"
+  token: "a3212dc4-4b5d-43cd-98f4-b11cdaf8b13c"
+
+threatfox:
+  api_url: "https://threatfox-api.abuse.ch/api/v1/"
+  import_ioc_types: "all"
+  interval: 3600
