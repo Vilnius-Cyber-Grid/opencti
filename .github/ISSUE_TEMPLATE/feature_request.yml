@@ -1,26 +1,52 @@
 name: Feature Request
-description: Suggest a new feature or improvement for this OpenCTI deployment
-title: "[Feature]: "
-labels: ["enhancement"]
+description: Propose a new feature or improvement for this OpenCTI deployment
+title: "[Feature]: <short summary>"
+labels: ["enhancement", "triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thank you for suggesting a feature! Please complete the form below.
+        ## Feature Request
+        Before opening a new request, please:
+        - Search [existing issues](../../issues?q=is%3Aissue+label%3Aenhancement) to avoid duplicates.
+        - Review the [OpenCTI documentation](https://docs.opencti.io) to confirm the feature doesn't already exist.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Pre-flight Checklist
+      options:
+        - label: I have searched existing issues and this is not a duplicate.
+          required: true
+        - label: I have read the OpenCTI documentation and this feature does not already exist.
+          required: true
 
   - type: dropdown
     id: area
     attributes:
       label: Area
-      description: Which area does this feature relate to?
+      description: Which part of the stack does this feature relate to?
       options:
         - OpenCTI Platform configuration
         - New connector integration
         - Existing connector improvement
         - Infrastructure / Docker Compose
         - Authentication / LDAP
+        - Observability / Logging
         - Documentation
         - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature to your workflow?
+      options:
+        - "Low — nice to have"
+        - "Medium — would improve productivity"
+        - "High — blocking or significantly limiting usage"
     validations:
       required: true
 
@@ -28,8 +54,12 @@ body:
     id: problem
     attributes:
       label: Problem Statement
-      description: Is your feature request related to a problem? Describe it.
-      placeholder: I find it frustrating when...
+      description: |
+        Describe the problem or gap this feature addresses.
+        A good problem statement focuses on the **why**, not the solution.
+      placeholder: |
+        When I try to [...], I cannot [...] because [...].
+        This causes [...].
     validations:
       required: true
 
@@ -37,7 +67,25 @@ body:
     id: solution
     attributes:
       label: Proposed Solution
-      description: Describe the solution or feature you would like to see.
+      description: |
+        Describe your proposed feature or change clearly and concisely.
+        Include any relevant configuration examples or workflows.
+      placeholder: |
+        I would like [...] to [...].
+        This could work by [...].
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: |
+        Define what "done" looks like. Use a checklist format where possible.
+      placeholder: |
+        - [ ] Given [...], when [...], then [...].
+        - [ ] Configuration option `X` is exposed in `.env`.
+        - [ ] Documentation is updated.
     validations:
       required: true
 
@@ -45,10 +93,21 @@ body:
     id: alternatives
     attributes:
       label: Alternatives Considered
-      description: Any alternative solutions or features you have considered?
+      description: |
+        Describe any alternative approaches you considered and why you prefer the proposed solution.
+
+  - type: textarea
+    id: references
+    attributes:
+      label: References
+      description: |
+        Links to related issues, PRs, documentation, upstream projects, or external resources.
+      placeholder: |
+        - OpenCTI docs: https://docs.opencti.io/...
+        - Related issue: #
 
   - type: textarea
     id: additional
     attributes:
       label: Additional Context
-      description: Add any other context, screenshots, or references here.
+      description: Add any other context, screenshots, or examples here.
