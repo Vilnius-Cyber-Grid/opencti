@@ -1,0 +1,80 @@
+name: Connector Issue
+description: Report a problem with a specific OpenCTI connector
+title: "[Connector]: "
+labels: ["connector", "bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to report issues related to a specific OpenCTI connector.
+
+  - type: dropdown
+    id: connector
+    attributes:
+      label: Connector Name
+      description: Which connector is experiencing the issue?
+      options:
+        - ThreatFox
+        - MITRE ATT&CK
+        - MISP
+        - Shodan
+        - AlienVault OTX
+        - AbuseIPDB
+        - TheHive
+        - Import Document
+        - Import File STIX
+        - Export File STIX
+        - Export File CSV
+        - Export File TXT
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: Issue Type
+      options:
+        - Connector not starting
+        - Authentication / API key error
+        - No data being ingested
+        - Data mapping / parsing error
+        - Performance / timeout
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Issue Description
+      description: A clear and concise description of the connector issue.
+    validations:
+      required: true
+
+  - type: textarea
+    id: connector_logs
+    attributes:
+      label: Connector Logs
+      description: Paste relevant connector logs (replace API keys and credentials with placeholders).
+      render: shell
+
+  - type: textarea
+    id: config_snippet
+    attributes:
+      label: Connector Configuration (sanitized)
+      description: Share the relevant connector configuration with sensitive values redacted.
+      render: yaml
+
+  - type: input
+    id: opencti_version
+    attributes:
+      label: OpenCTI Version
+      placeholder: e.g. 6.x.x
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
