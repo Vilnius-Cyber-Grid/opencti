@@ -1,0 +1,19 @@
+---
+extends: default
+
+rules:
+  line-length:
+    max: 200
+    allow-non-breakable-words: true
+    allow-non-breakable-inline-mappings: true
+  truthy:
+    check-keys: false
+  comments:
+    min-spaces-from-content: 1
+  # Top-level section comments in docker-compose.yml are intentionally
+  # at column 1 and not indented to content level — disable this rule.
+  comments-indentation: disable
+  document-start: disable
+  indentation:
+    spaces: 2
+    indent-sequences: consistent

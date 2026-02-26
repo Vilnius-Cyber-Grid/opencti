@@ -74,7 +74,7 @@ services:
     volumes:
       - type: bind
         source: ./rabbitmq.conf
-        target: /etc/rabbitmq/rabbitmq.conf 
+        target: /etc/rabbitmq/rabbitmq.conf
       - amqpdata:/var/lib/rabbitmq
     restart: always
     healthcheck:
@@ -92,7 +92,7 @@ services:
       - NODE_OPTIONS=--max-old-space-size=8096
       - APP__PORT=8080
       - APP__BASE_URL=${OPENCTI_BASE_URL}
-      - APP__SECRET=${OPENCTI_SECRET} 
+      - APP__SECRET=${OPENCTI_SECRET}
       # === LOCAL ADMIN (BREAK-GLASS) ===
       - APP__ADMIN__EMAIL=${OPENCTI_ADMIN_EMAIL}
       - APP__ADMIN__PASSWORD=${OPENCTI_ADMIN_PASSWORD}
@@ -129,7 +129,7 @@ services:
       - PROVIDERS__LDAP__CONFIG__BIND_DN=${AUTH_LDAP_BIND_DN}
       - PROVIDERS__LDAP__CONFIG__BIND_CREDENTIALS=${AUTH_LDAP_BIND_PASSWORD}
       - PROVIDERS__LDAP__CONFIG__SEARCH_BASE=${AUTH_LDAP_BASE_DN}
-      - PROVIDERS__LDAP__CONFIG__SEARCH_FILTER=(&(sAMAccountName={{username}})(memberOf=CN=OpenCTI_Users,OU=Admin,OU=Inovacijų ir technologijų grupė,OU=Grupės,OU=VMSA,DC=vilnius,DC=vilnius,DC=lt))      
+      - PROVIDERS__LDAP__CONFIG__SEARCH_FILTER=(&(sAMAccountName={{username}})(memberOf=CN=OpenCTI_Users,OU=Admin,OU=Inovacijų ir technologijų grupė,OU=Grupės,OU=VMSA,DC=vilnius,DC=vilnius,DC=lt))
       - PROVIDERS__LDAP__CONFIG__MAIL_ATTRIBUTE=mail
       - PROVIDERS__LDAP__CONFIG__ACCOUNT_ATTRIBUTE=displayName
       - PROVIDERS__LDAP__CONFIG__REFERRALS=false
@@ -297,7 +297,6 @@ services:
         condition: service_healthy
 
 
-
   ##########     MISP  ##########
   connector-misp:
     image: opencti/connector-misp:6.8.12
@@ -429,7 +428,7 @@ services:
 
 ########### AbuseIPDB ##########
   opencti-connector-abuseipdb:
-    image: opencti/connector-abuseipdb:6.8.12 
+    image: opencti/connector-abuseipdb:6.8.12
     container_name: opencti-connector-abuseipdb
     restart: always
     environment:
