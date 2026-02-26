@@ -1,0 +1,9 @@
+---
+# MD013 - Line length - disabled because prose shouldn't be hard-wrapped
+MD013: false
+
+# MD033 - Inline HTML - disabled for badges, images, and other HTML elements
+MD033: false
+
+# MD041 - First line should be a top-level heading
+MD041: true

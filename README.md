@@ -1,8 +1,11 @@
 # OpenCTI — Custom Docker Deployment
 
+[![Lint](https://github.com/Vilnius-Cyber-Grid/opencti/actions/workflows/lint.yml/badge.svg)](https://github.com/Vilnius-Cyber-Grid/opencti/actions/workflows/lint.yml)
+
 A production Docker Compose deployment of the [OpenCTI](https://opencti.io) Cyber Threat Intelligence platform, extended with a custom connector set and LDAP authentication.
 
 Based on:
+
 - [OpenCTI-Platform/opencti](https://github.com/OpenCTI-Platform/opencti) — core platform (Apache 2.0)
 - [OpenCTI-Platform/docker](https://github.com/OpenCTI-Platform/docker) — reference Docker deployment
 
@@ -92,6 +95,35 @@ The platform is configured with two providers:
 
 - **Local** — break-glass admin account defined in `.env`
 - **LDAP** — Active Directory SSO via `LdapStrategy`
+
+---
+
+## Static Checks & Linting
+
+This repository uses [pre-commit](https://pre-commit.com) to enforce code quality on every commit. All linter configurations live in the `linters/` directory.
+
+| Tool | Target | Config |
+|---|---|---|
+| [yamllint](https://github.com/adrienverge/yamllint) | YAML files (`*.yml`, `*.yaml`) | [`linters/.yamllint.yml`](linters/.yamllint.yml) |
+| [markdownlint](https://github.com/igorshubovych/markdownlint-cli) | Markdown files (`*.md`) | [`linters/.markdownlint.yml`](linters/.markdownlint.yml) |
+| [dotenv-linter](https://github.com/wemake-services/dotenv-linter) | `.env*` files | — |
+| [gitleaks](https://github.com/gitleaks/gitleaks) | Entire repo (secret detection) | [`linters/.gitleaks.toml`](linters/.gitleaks.toml) |
+| `docker compose config` | `docker-compose.yml` | — |
+
+### Local Setup
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+Hooks will now run automatically on every `git commit`. To run all checks manually:
+
+```bash
+pre-commit run --all-files
+```
+
+Checks are also enforced in CI via GitHub Actions (see `.github/workflows/lint.yml`).
 
 ---
 
