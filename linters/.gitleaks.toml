@@ -8,5 +8,5 @@ useDefault = true
   description = "Allowlisted files and paths"
   paths = [
     # .env.example contains empty placeholder values, not real secrets
-    '''.env\.example''',
+    '''^\.env\.example$''',
   ]
