@@ -29,6 +29,7 @@ repos:
     rev: 0.5.0
     hooks:
       - id: dotenv-linter
+        files: \.env(\..+)?$
 
   # ── Secret detection ──────────────────────────────────────────
   - repo: https://github.com/gitleaks/gitleaks
@@ -42,7 +43,7 @@ repos:
     hooks:
       - id: docker-compose-check
         name: Validate docker-compose.yml
-        entry: docker compose config --quiet
+        entry: docker compose -f docker-compose.yml config --quiet
         language: system
         files: docker-compose\.yml$
         pass_filenames: false
