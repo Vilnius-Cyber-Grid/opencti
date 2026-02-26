@@ -2,8 +2,8 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
 
-# Automatically update hook versions monthly (run: pre-commit autoupdate)
-autoupdate_schedule: monthly
+ci:
+  autoupdate_schedule: monthly
 
 # Pin Python version used by Python-based hooks
 default_language_version:
