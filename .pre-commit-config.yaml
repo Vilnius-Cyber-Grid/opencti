@@ -23,13 +23,17 @@ repos:
     hooks:
       - id: markdownlint
         args: [--config, linters/.markdownlint.yml]
+        always_run: true
 
   # ── Dotenv linting ────────────────────────────────────────────
   - repo: https://github.com/wemake-services/dotenv-linter
     rev: 0.5.0
     hooks:
       - id: dotenv-linter
+        entry: dotenv-linter lint .env.example
         files: \.env(\..+)?$
+        pass_filenames: false
+        always_run: true
 
   # ── Secret detection ──────────────────────────────────────────
   - repo: https://github.com/gitleaks/gitleaks
@@ -47,3 +51,4 @@ repos:
         language: system
         files: docker-compose\.yml$
         pass_filenames: false
+        always_run: true
