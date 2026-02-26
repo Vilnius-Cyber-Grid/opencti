@@ -16,6 +16,7 @@ repos:
     hooks:
       - id: yamllint
         args: [-c, linters/.yamllint.yml, --strict]
+        always_run: true
 
   # ── Markdown linting ──────────────────────────────────────────
   - repo: https://github.com/igorshubovych/markdownlint-cli
