@@ -156,7 +156,7 @@ services:
   worker:
     image: opencti/worker:6.8.12
     environment:
-      - OPENCTI_URL=http://localhost:8080
+      - OPENCTI_URL=${OPENCTI_BASE_URL}
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - WORKER_LOG_LEVEL=info
     depends_on:
@@ -170,7 +170,7 @@ services:
   connector-export-file-stix:
     image: opencti/connector-export-file-stix:6.8.12
     environment:
-      - OPENCTI_URL=http://localhost:8080
+      - OPENCTI_URL=${OPENCTI_BASE_URL}
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=${CONNECTOR_EXPORT_FILE_STIX_ID}
       - CONNECTOR_TYPE=INTERNAL_EXPORT_FILE
@@ -185,7 +185,7 @@ services:
   connector-export-file-csv:
     image: opencti/connector-export-file-csv:6.8.12
     environment:
-      - OPENCTI_URL=http://localhost:8080
+      - OPENCTI_URL=${OPENCTI_BASE_URL}
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=${CONNECTOR_EXPORT_FILE_CSV_ID}
       - CONNECTOR_TYPE=INTERNAL_EXPORT_FILE
@@ -200,7 +200,7 @@ services:
   connector-export-file-txt:
     image: opencti/connector-export-file-txt:6.8.12
     environment:
-      - OPENCTI_URL=http://localhost:8080
+      - OPENCTI_URL=${OPENCTI_BASE_URL}
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=${CONNECTOR_EXPORT_FILE_TXT_ID}
       - CONNECTOR_TYPE=INTERNAL_EXPORT_FILE
@@ -215,7 +215,7 @@ services:
   connector-import-file-stix:
     image: opencti/connector-import-file-stix:6.8.12
     environment:
-      - OPENCTI_URL=http://localhost:8080
+      - OPENCTI_URL=${OPENCTI_BASE_URL}
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=${CONNECTOR_IMPORT_FILE_STIX_ID}
       - CONNECTOR_TYPE=INTERNAL_IMPORT_FILE
@@ -232,7 +232,7 @@ services:
   connector-import-document:
     image: opencti/connector-import-document:6.8.12
     environment:
-      - OPENCTI_URL=http://localhost:8080
+      - OPENCTI_URL=${OPENCTI_BASE_URL}
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=${CONNECTOR_IMPORT_DOCUMENT_ID}
       - CONNECTOR_TYPE=INTERNAL_IMPORT_FILE
@@ -251,7 +251,7 @@ services:
   connector-analysis:
     image: opencti/connector-import-document:6.8.12
     environment:
-      - OPENCTI_URL=http://localhost:8080
+      - OPENCTI_URL=${OPENCTI_BASE_URL}
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=${CONNECTOR_ANALYSIS_ID}
       - CONNECTOR_TYPE=INTERNAL_ANALYSIS
@@ -271,7 +271,7 @@ services:
     image: opencti/connector-mitre:6.8.12
     restart: always
     environment:
-      - OPENCTI_URL=http://localhost:8080
+      - OPENCTI_URL=${OPENCTI_BASE_URL}
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=mitre-001
       - CONNECTOR_TYPE=EXTERNAL_IMPORT
@@ -302,7 +302,7 @@ services:
   connector-misp:
     image: opencti/connector-misp:6.8.12
     environment:
-      - OPENCTI_URL=http://localhost:8080
+      - OPENCTI_URL=${OPENCTI_BASE_URL}
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=${CONNECTOR_MISP_ID}
       - CONNECTOR_TYPE=EXTERNAL_IMPORT
@@ -355,7 +355,7 @@ services:
     container_name: threatfox-connector
     restart: always
     environment:
-      - OPENCTI_URL=http://localhost:8080
+      - OPENCTI_URL=${OPENCTI_BASE_URL}
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=threatfox-connector-01
       - CONNECTOR_TYPE=EXTERNAL_IMPORT
@@ -376,7 +376,7 @@ services:
     container_name: opencti-connector-urlhaus
     restart: always
     environment:
-      - OPENCTI_URL=http://localhost:8080
+      - OPENCTI_URL=${OPENCTI_BASE_URL}
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=urlhaus-connector-001
       - CONNECTOR_NAME=URLHaus
@@ -391,10 +391,10 @@ services:
 
   ########## CISA KEV ##########
   cisa-kev:
-    image: opencti/connector-cisa-known-exploited-vulnerabilities:latest
+    image: opencti/connector-cisa-known-exploited-vulnerabilities:6.8.12
     restart: always
     environment:
-      - OPENCTI_URL=http://localhost:8080
+      - OPENCTI_URL=${OPENCTI_BASE_URL}
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=CISA-KEV-001
       - CONNECTOR_TYPE=EXTERNAL_IMPORT
@@ -412,7 +412,7 @@ services:
     container_name: opencti-connector-alienvault
     restart: always
     environment:
-      - OPENCTI_URL=http://localhost:8080
+      - OPENCTI_URL=${OPENCTI_BASE_URL}
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=${CONNECTOR_ALIENVAULT_ID}
       - CONNECTOR_NAME=AlienVault OTX
@@ -429,11 +429,11 @@ services:
 
 ########### AbuseIPDB ##########
   opencti-connector-abuseipdb:
-    image: opencti/connector-abuseipdb:latest
+    image: opencti/connector-abuseipdb:6.8.12 
     container_name: opencti-connector-abuseipdb
     restart: always
     environment:
-      - OPENCTI_URL=http://localhost:8080
+      - OPENCTI_URL=${OPENCTI_BASE_URL}
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=abuseipdb-001
       - CONNECTOR_TYPE=EXTERNAL_IMPORT
@@ -455,7 +455,7 @@ services:
     image: opencti/connector-malwarebazaar:6.8.12
     restart: always
     environment:
-      - OPENCTI_URL=http://localhost:8080
+      - OPENCTI_URL=${OPENCTI_BASE_URL}
       - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
       - CONNECTOR_ID=malwarebazaar-001
       - CONNECTOR_NAME=MalwareBazaar
