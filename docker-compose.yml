@@ -429,7 +429,7 @@ services:
 
 ########### AbuseIPDB ##########
   opencti-connector-abuseipdb:
-    image: opencti/connector-abuseipdb:6.8.12 
+    image: opencti/connector-abuseipdb:6.8.12
     container_name: opencti-connector-abuseipdb
     restart: always
     environment:
