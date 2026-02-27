@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+# Git pre-commit hook — runs linting and validation checks.
+#
+# Setup (one-time):
+#   git config core.hooksPath hooks
+#
+# Missing tools are detected automatically and you will be prompted to install them.
+
+set -euo pipefail
+
+PASS=0
+FAIL=1
+status=$PASS
+
+# ── Auto-install helpers ───────────────────────────────────────
+
+prompt_install() {
+  # Returns 0 (yes) or 1 (no). Falls back to "no" in non-interactive shells.
+  local tool="$1" cmd="$2"
+  if [[ ! -t 0 ]]; then
+    echo "[SKIP] $tool — not installed (non-interactive shell, skipping install)"
+    return 1
+  fi
+  read -r -p "[MISSING] $tool not found. Install now? ($cmd) [y/N] " reply </dev/tty
+  [[ "$reply" =~ ^[Yy]$ ]]
+}
+
+ensure_installed() {
+  local tool="$1" binary="$2" installer="$3" install_cmd="$4"
+  if command -v "$binary" &>/dev/null; then return 0; fi
+  if prompt_install "$tool" "$install_cmd"; then
+    echo "[INSTALL] Running: $install_cmd"
+    eval "$install_cmd"
+    if ! command -v "$binary" &>/dev/null; then
+      echo "[ERROR] Install succeeded but '$binary' still not in PATH. Check your shell config."
+      return 1
+    fi
+    echo "[OK] $tool installed."
+    return 0
+  else
+    return 1  # user declined
+  fi
+}
+
+install_yamllint()      { ensure_installed "yamllint"         yamllint       brew       "brew install yamllint"; }
+install_markdownlint()  { ensure_installed "markdownlint-cli" markdownlint   npm        "npm install -g markdownlint-cli"; }
+install_dotenv_linter() { ensure_installed "dotenv-linter"    dotenv-linter  brew       "brew install dotenv-linter"; }
+install_gitleaks()      { ensure_installed "gitleaks"         gitleaks       brew       "brew install gitleaks"; }
+
+# ── Run check ─────────────────────────────────────────────────
+
+run_check() {
+  local name="$1"
+  shift
+  if ! command -v "$1" &>/dev/null; then
+    echo "[SKIP] $name — '$1' not found in PATH"
+    return
+  fi
+  echo "[RUN]  $name"
+  if ! "$@"; then
+    echo "[FAIL] $name"
+    status=$FAIL
+  else
+    echo "[OK]   $name"
+  fi
+}
+
+# ── YAML linting ──────────────────────────────────────────────
+install_yamllint && run_check "YAML lint" yamllint -c linters/.yamllint.yml --strict .
+
+# ── Markdown linting ──────────────────────────────────────────
+install_markdownlint && run_check "Markdown lint" markdownlint --config linters/.markdownlint.yml .
+
+# ── Dotenv linting ────────────────────────────────────────────
+env_files=$(find . -name ".env*" -not -name ".env" -not -path "*/.git/*" -not -path "*/node_modules/*")
+if [[ -n "$env_files" ]]; then
+  # shellcheck disable=SC2086
+  install_dotenv_linter && run_check "Dotenv lint" dotenv-linter check $env_files
+else
+  echo "[SKIP] Dotenv lint — no .env files found"
+fi
+
+# ── Secret detection ──────────────────────────────────────────
+install_gitleaks && run_check "Gitleaks" gitleaks protect --staged --config linters/.gitleaks.toml
+
+# ── Docker Compose validation ─────────────────────────────────
+run_check "Docker Compose validate" docker compose -f docker-compose.yml config --quiet
+
+if [[ $status -ne $PASS ]]; then
+  echo ""
+  echo "Pre-commit checks failed. Fix the issues above and try again."
+  exit 1
+fi
+
+echo ""
+echo "All pre-commit checks passed."
