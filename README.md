@@ -14,7 +14,7 @@ Based on:
 ## Stack
 
 | Service | Description |
-|---|---|
+| --- | --- |
 | `opencti` | OpenCTI platform (`opencti/platform:6.8.12`) |
 | `worker` | 3× OpenCTI workers |
 | `elasticsearch` | Search & storage backend |
@@ -25,7 +25,7 @@ Based on:
 ### Connectors
 
 | Connector | Type | Source |
-|---|---|---|
+| --- | --- | --- |
 | MITRE ATT&CK | External Import | Docker Hub |
 | MISP | External Import | Docker Hub |
 | Shodan | External Import | Docker Hub |
@@ -62,7 +62,7 @@ The platform will be available at `http://localhost:8080` (or the `OPENCTI_BASE_
 All configuration is driven by `.env`. Key variables:
 
 | Variable | Description |
-|---|---|
+| --- | --- |
 | `OPENCTI_ADMIN_EMAIL` | Break-glass admin email |
 | `OPENCTI_ADMIN_PASSWORD` | Break-glass admin password |
 | `OPENCTI_ADMIN_TOKEN` | Shared token used by all connectors |
@@ -103,7 +103,7 @@ The platform is configured with two providers:
 This repository uses [pre-commit](https://pre-commit.com) to enforce code quality on every commit. All linter configurations live in the `linters/` directory.
 
 | Tool | Target | Config |
-|---|---|---|
+| --- | --- | --- |
 | [yamllint](https://github.com/adrienverge/yamllint) | YAML files (`*.yml`, `*.yaml`) | [`linters/.yamllint.yml`](linters/.yamllint.yml) |
 | [markdownlint](https://github.com/igorshubovych/markdownlint-cli) | Markdown files (`*.md`) | [`linters/.markdownlint.yml`](linters/.markdownlint.yml) |
 | [dotenv-linter](https://github.com/wemake-services/dotenv-linter) | `.env*` files | — |
