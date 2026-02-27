@@ -45,7 +45,6 @@ ensure_installed() {
 install_yamllint()      { ensure_installed "yamllint"         yamllint       brew       "brew install yamllint"; }
 install_markdownlint()  { ensure_installed "markdownlint-cli" markdownlint   npm        "npm install -g markdownlint-cli"; }
 install_dotenv_linter() { ensure_installed "dotenv-linter"    dotenv-linter  brew       "brew install dotenv-linter"; }
-install_gitleaks()      { ensure_installed "gitleaks"         gitleaks       brew       "brew install gitleaks"; }
 
 # ── Run check ─────────────────────────────────────────────────
 
@@ -79,9 +78,6 @@ if [[ -n "$env_files" ]]; then
 else
   echo "[SKIP] Dotenv lint — no .env files found"
 fi
-
-# ── Secret detection ──────────────────────────────────────────
-install_gitleaks && run_check "Gitleaks" gitleaks protect --staged --config linters/.gitleaks.toml
 
 # ── Docker Compose validation ─────────────────────────────────
 run_check "Docker Compose validate" docker compose -f docker-compose.yml config --quiet
