@@ -1,0 +1,118 @@
+#!/usr/bin/env bash
+# Git pre-commit hook — runs linting and validation checks.
+#
+# Setup (one-time):
+#   git config core.hooksPath hooks
+#
+# Missing tools are detected automatically and you will be prompted to install them.
+
+set -euo pipefail
+
+PASS=0
+FAIL=1
+status=$PASS
+
+# ── Auto-install helpers ───────────────────────────────────────
+
+prompt_install() {
+  # Returns 0 (yes) or 1 (no). Falls back to "no" in non-interactive shells.
+  local tool="$1" cmd="$2"
+  if [[ ! -t 0 ]]; then
+    echo "[SKIP] $tool — not installed (non-interactive shell, skipping install)"
+    return 1
+  fi
+  read -r -p "[MISSING] $tool not found. Install now? ($cmd) [y/N] " reply </dev/tty
+  [[ "$reply" =~ ^[Yy]$ ]]
+}
+
+ensure_installed() {
+  local tool="$1" binary="$2" installer="$3" install_cmd="$4"
+  if command -v "$binary" &>/dev/null; then return 0; fi
+  if prompt_install "$tool" "$install_cmd"; then
+    echo "[INSTALL] Running: $install_cmd"
+    eval "$install_cmd"
+    if ! command -v "$binary" &>/dev/null; then
+      echo "[ERROR] Install succeeded but '$binary' still not in PATH. Check your shell config."
+      return 1
+    fi
+    echo "[OK] $tool installed."
+    return 0
+  else
+    return 1  # user declined
+  fi
+}
+
+# Resolve best install command for each tool based on available package managers
+_install_cmd_yamllint() {
+  if command -v pip3  &>/dev/null; then echo "pip3 install --user yamllint"
+  elif command -v pip &>/dev/null; then echo "pip install --user yamllint"
+  elif command -v brew &>/dev/null; then echo "brew install yamllint"
+  else echo "apt-get install -y yamllint 2>/dev/null || yum install -y yamllint"
+  fi
+}
+
+_install_cmd_markdownlint() {
+  if command -v npm &>/dev/null; then echo "npm install -g markdownlint-cli"
+  elif command -v brew &>/dev/null; then echo "brew install markdownlint-cli"
+  else echo "npm install -g markdownlint-cli  # requires Node.js: https://nodejs.org"
+  fi
+}
+
+_install_cmd_dotenv_linter() {
+  if command -v brew &>/dev/null; then echo "brew install dotenv-linter"
+  elif command -v cargo &>/dev/null; then echo "cargo install dotenv-linter"
+  else
+    local arch; arch=$(uname -m)
+    local os; os=$(uname -s | tr '[:upper:]' '[:lower:]')
+    echo "curl -sSfL https://github.com/dotenv-linter/dotenv-linter/releases/download/v4.0.0/dotenv-linter-${os}-${arch}.tar.gz | tar -xz && sudo mv dotenv-linter /usr/local/bin/"
+  fi
+}
+
+install_yamllint()      { ensure_installed "yamllint"         yamllint      ""  "$(_install_cmd_yamllint)"; }
+install_markdownlint()  { ensure_installed "markdownlint-cli" markdownlint  ""  "$(_install_cmd_markdownlint)"; }
+install_dotenv_linter() { ensure_installed "dotenv-linter"    dotenv-linter ""  "$(_install_cmd_dotenv_linter)"; }
+
+# ── Run check ─────────────────────────────────────────────────
+
+run_check() {
+  local name="$1"
+  shift
+  if ! command -v "$1" &>/dev/null; then
+    echo "[SKIP] $name — '$1' not found in PATH"
+    return
+  fi
+  echo "[RUN]  $name"
+  if ! "$@"; then
+    echo "[FAIL] $name"
+    status=$FAIL
+  else
+    echo "[OK]   $name"
+  fi
+}
+
+# ── YAML linting ──────────────────────────────────────────────
+install_yamllint && run_check "YAML lint" yamllint -c linters/.yamllint.yml --strict .
+
+# ── Markdown linting ──────────────────────────────────────────
+install_markdownlint && run_check "Markdown lint" markdownlint --config linters/.markdownlint.yml .
+
+# ── Dotenv linting ────────────────────────────────────────────
+env_files=$(find . -name ".env*" -not -name ".env" -not -path "*/.git/*" -not -path "*/node_modules/*")
+if [[ -n "$env_files" ]]; then
+  # shellcheck disable=SC2086
+  install_dotenv_linter && run_check "Dotenv lint" dotenv-linter check $env_files
+else
+  echo "[SKIP] Dotenv lint — no .env files found"
+fi
+
+# ── Docker Compose validation ─────────────────────────────────
+run_check "Docker Compose validate" docker compose -f docker-compose.yml config --quiet
+
+if [[ $status -ne $PASS ]]; then
+  echo ""
+  echo "Pre-commit checks failed. Fix the issues above and try again."
+  exit 1
+fi
+
+echo ""
+echo "All pre-commit checks passed."
