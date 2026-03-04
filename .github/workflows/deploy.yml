@@ -9,7 +9,7 @@ concurrency:
 
 jobs:
   deploy:
-    name: Deploy app
+    name: Deploy
     runs-on: self-hosted
     env:
       COMPOSE: docker compose -f docker-compose.yml
@@ -30,13 +30,10 @@ jobs:
           EOF
 
       - name: Down old containers
-        run: |
-          $COMPOSE down --remove-orphans
+        run: $COMPOSE down --remove-orphans
 
       - name: Up and running new containers
-        run: |
-          echo "Deploying tag: $IMAGE_TAG"
-          $COMPOSE up -d --build --remove-orphans
+        run: $COMPOSE up -d --build --remove-orphans
 
       - name: Cleanup unused Docker resources
         run: |
