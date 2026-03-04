@@ -129,4 +129,28 @@ variable "ansible_playbook" {
   description = "Path to Ansible playbook to run after provisioning"
   type        = string
   default     = null
+
+variable "vm_hostname" {
+  description = "Hostname to configure inside the VM"
+  type        = string
+  default     = "opencti"
+}
+
+variable "vm_domain" {
+  description = "Domain to configure inside the VM (example.local for public repos)"
+  type        = string
+  default     = "example.local"
+}
+
+variable "enable_ssh_key_setup" {
+  description = "Whether to run remote-exec to append SSH public key (not recommended for production templates)"
+  type        = bool
+  default     = false
+}
+
+variable "enable_ansible" {
+  description = "Whether to generate inventory and run Ansible after VM creation"
+  type        = bool
+  default     = false
+}
 }
