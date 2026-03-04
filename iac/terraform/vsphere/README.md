@@ -43,6 +43,5 @@ This folder contains a **vSphere-only** Terraform configuration that provisions 
 
 ### 1) Copy tfvars
 
-```
+```bash
 cp terraform.tfvars.example terraform.tfvars
-```
