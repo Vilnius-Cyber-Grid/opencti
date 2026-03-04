@@ -1,6 +1,6 @@
 - name: Ensure Docker Compose is installed
   hosts: all
-  become: yes
+  become: true
 
   tasks:
     - name: Get system architecture
@@ -13,13 +13,13 @@
     - name: Define Docker Compose version variable
       command: which docker-compose
       register: docker_compose_path
-      ignore_errors: yes
+      ignore_errors: true
 
     - name: Check Docker Compose version if installed
       command: "{{ docker_compose_path.stdout }} --version"
       register: docker_compose_version
       when: docker_compose_path.stdout != ""
-      ignore_errors: yes
+      ignore_errors: true
 
     - name: Output Docker Compose version if installed
       debug:
@@ -30,7 +30,7 @@
       block:
         - name: Update and upgrade the system
           apt:
-            update_cache: yes
+            update_cache: true
             upgrade: dist
             cache_valid_time: 3600
 
