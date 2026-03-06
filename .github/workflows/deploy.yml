@@ -1,0 +1,49 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.ref_name }}-deployment
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: self-hosted
+    env:
+      COMPOSE: docker compose -f docker-compose.yml
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Show images compose will pull
+        run: $COMPOSE config --images
+
+      - name: Pull images
+        run: $COMPOSE pull
+
+      - name: Set .env file
+        run: |
+          cat << 'EOF' > .env
+          ${{ secrets.ENV }}
+          EOF
+
+      - name: Down old containers
+        run: $COMPOSE down --remove-orphans
+
+      - name: Up and running new containers
+        run: $COMPOSE up -d --build --remove-orphans
+
+      - name: Cleanup unused Docker resources
+        run: |
+          echo "Pruning unused Docker images..."
+          docker image prune -af --filter "until=24h"
+          echo "Pruning unused Docker volumes..."
+          docker volume prune -f
+          echo "Pruning unused Docker networks..."
+          docker network prune -f
+          echo "Pruning build cache..."
+          docker builder prune -af --filter "until=24h"
+          echo "Disk usage after cleanup:"
+          docker system df
