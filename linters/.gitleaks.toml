@@ -1,0 +1,27 @@
+# Gitleaks configuration
+# https://github.com/gitleaks/gitleaks
+
+title = "OpenCTI gitleaks config"
+
+[extend]
+# Extend the default ruleset shipped with gitleaks
+useDefault = true
+
+[[rules]]
+id          = "opencti-token"
+description = "OpenCTI admin token (UUID format)"
+regex       = '''OPENCTI_ADMIN_TOKEN\s*=\s*[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}'''
+tags        = ["opencti", "token"]
+
+[[rules]]
+id          = "opencti-config-token"
+description = "Hardcoded token in ThreatFox / connector config YAML"
+regex       = '''token:\s*["']?[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}["']?'''
+tags        = ["opencti", "connector", "token"]
+
+[allowlist]
+description = "Global allowlist"
+paths       = [
+  ".env.example",
+  "linters/.gitleaks.toml",
+]
