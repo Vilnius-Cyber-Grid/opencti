@@ -60,7 +60,7 @@ jobs:
 
       - name: Checkout project repository
         if: env.docker_installed == 'false'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Running Ansible playbook to install Docker
         if: env.docker_installed == 'false'
@@ -90,7 +90,7 @@ jobs:
 
       - name: Checkout project repository
         if: env.docker_compose_installed == 'false'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Running Ansible playbook to install Docker Compose
         if: env.docker_compose_installed == 'false'
@@ -102,7 +102,7 @@ jobs:
     needs: [setup_docker_compose]
     steps:
       - name: Checkout project repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Check if user is in Docker group
         run: ansible-playbook -i iac/ansible/inventory iac/ansible/add_docker_group.yml --extra-vars "username=${{ vars.WEB_USER }}"

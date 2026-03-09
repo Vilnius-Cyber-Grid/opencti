@@ -8,8 +8,8 @@ connector:
   log_level: "info"
 
 opencti:
-  url: "http://10.10.88.200:8080"
-  token: "a3212dc4-4b5d-43cd-98f4-b11cdaf8b13c"
+  url: "http://opencti:8080"
+  token: ""  # set to OPENCTI_ADMIN_TOKEN value
 
 threatfox:
   api_url: "https://threatfox-api.abuse.ch/api/v1/"

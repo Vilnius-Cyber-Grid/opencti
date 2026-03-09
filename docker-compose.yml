@@ -421,6 +421,7 @@ services:
       - CONNECTOR_CONFIDENCE_LEVEL=90
       - ALIENVAULT_REPORT_STATUS=new
       - CONNECTOR_LOG_LEVEL=info
+      - ALIENVAULT_API_KEY=${ALIENVAULT_API_KEY}
       - ALIENVAULT_POLLING_INTERVAL=3600
       - CONNECTOR_RUN_AND_TERMINATE=false
     depends_on:
@@ -464,7 +465,7 @@ services:
       - CONNECTOR_CONFIDENCE_LEVEL=80
       - CONNECTOR_UPDATE_INTERVAL=3600
       - CONNECTOR_LOG_LEVEL=info
-      - MALWAREBAZAAR_API_KEY=dummy
+      - MALWAREBAZAAR_API_KEY=${MALWAREBAZAAR_API_KEY}
     depends_on:
       opencti:
         condition: service_healthy

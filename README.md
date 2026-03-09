@@ -15,6 +15,7 @@ Based on:
 
 | Service | Description |
 | --- | --- |
+| `rsa-key-generator` | One-shot RSA-4096 key generation on first boot |
 | `opencti` | OpenCTI platform (`opencti/platform:6.8.12`) |
 | `worker` | 3× OpenCTI workers |
 | `elasticsearch` | Search & storage backend |
@@ -37,6 +38,7 @@ Based on:
 | MalwareBazaar | External Import | Docker Hub |
 | Export File STIX/CSV/TXT | Internal Export | Docker Hub |
 | Import File STIX / Document | Internal Import | Docker Hub |
+| Document Analysis | Internal Analysis | Docker Hub |
 
 ---
 
@@ -89,6 +91,35 @@ docker compose down -v
 
 ---
 
+## IaC
+
+### Ansible (`iac/ansible/`)
+
+Three playbooks for target host bootstrap:
+
+| Playbook | Purpose |
+| --- | --- |
+| `install_docker.yml` | Installs Docker Engine |
+| `install_docker_compose.yml` | Installs Docker Compose v2 plugin |
+| `add_docker_group.yml` | Adds the deploy user to the `docker` group |
+
+Edit `iac/ansible/inventory` to target a different host.
+
+### Terraform (`iac/terraform/vsphere/`)
+
+Provisions the VM on vSphere.
+
+```bash
+cd iac/terraform/vsphere
+cp terraform.tfvars.example terraform.tfvars
+# Fill in terraform.tfvars
+terraform init && terraform apply
+```
+
+> Do not commit `terraform.tfvars` or `.terraform/`.
+
+---
+
 ## Authentication
 
 The platform is configured with two providers:
@@ -124,6 +155,33 @@ pre-commit run --all-files
 ```
 
 Checks are also enforced in CI via GitHub Actions (see `.github/workflows/lint.yml`).
+
+---
+
+## Contributing
+
+### Branching
+
+Work on a feature branch and open a pull request targeting `main`. All checks must pass before merging.
+
+### Adding a Connector
+
+1. Add a service block in `docker-compose.yml` following the existing connector pattern.
+2. Set the required environment variables: `OPENCTI_URL`, `OPENCTI_TOKEN`, `CONNECTOR_ID`, `CONNECTOR_TYPE`, `CONNECTOR_NAME`, `CONNECTOR_SCOPE`, `CONNECTOR_CONFIDENCE_LEVEL`, `CONNECTOR_LOG_LEVEL`.
+3. Add `CONNECTOR_<NAME>_ID=` (and any API key variables) to `.env.example`.
+4. Add a `depends_on: opencti: condition: service_healthy` block.
+5. If a config file is needed, place it under `connectors/<name>/` and bind-mount it as `:ro`.
+6. Update the Connectors table in this README.
+
+### Upgrading OpenCTI
+
+All `opencti/*` images share a single version tag. Update every `opencti/*` image in `docker-compose.yml` to the same new version simultaneously and update the version references in this README.
+
+### Commit Hygiene
+
+- Install the pre-commit hook once: `git config core.hooksPath hooks`
+- The hook runs yamllint, markdownlint, dotenv-linter, gitleaks, and `docker compose config` validation automatically on every commit.
+- Never commit `.env`, `terraform.tfvars`, or `.terraform/`.
 
 ---
 
