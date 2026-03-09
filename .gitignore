@@ -3,6 +3,15 @@
 !.env.example
 *.save
 
+# === Terraform ===
+terraform.tfvars
+*.tfvars
+!*.tfvars.example
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+
 # === macOS ===
 .DS_Store
 .AppleDouble
