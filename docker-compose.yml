@@ -363,9 +363,10 @@ services:
       - CONNECTOR_SCOPE=indicator
       - CONNECTOR_CONFIDENCE_LEVEL=80
       - CONNECTOR_UPDATE_INTERVAL=3600
+      - CONNECTOR_UPDATE_EXISTING_DATA=true
       - CONNECTOR_LOG_LEVEL=info
-    volumes:
-      - ./connectors/threatfox/config.yml:/app/config.yml:ro
+      - THREATFOX_API_URL=https://threatfox-api.abuse.ch/api/v1/
+      - THREATFOX_IMPORT_IOC_TYPES=all
     depends_on:
       opencti:
         condition: service_healthy
@@ -402,28 +403,6 @@ services:
       - CONNECTOR_SCOPE=vulnerability
       - CONNECTOR_CONFIDENCE_LEVEL=90
       - UPDATE_INTERVAL=86400
-    depends_on:
-      opencti:
-        condition: service_healthy
-
-########## AlienVault OTX ##########
-  connector-alienvault:
-    image: opencti/connector-alienvault:6.8.12
-    container_name: opencti-connector-alienvault
-    restart: always
-    environment:
-      - OPENCTI_URL=${OPENCTI_BASE_URL}
-      - OPENCTI_TOKEN=${OPENCTI_ADMIN_TOKEN}
-      - CONNECTOR_ID=${CONNECTOR_ALIENVAULT_ID}
-      - CONNECTOR_NAME=AlienVault OTX
-      - CONNECTOR_TYPE=EXTERNAL_IMPORT
-      - CONNECTOR_SCOPE=indicator,ipv4-addr,domain-name,hash
-      - CONNECTOR_CONFIDENCE_LEVEL=90
-      - ALIENVAULT_REPORT_STATUS=new
-      - CONNECTOR_LOG_LEVEL=info
-      - ALIENVAULT_API_KEY=${ALIENVAULT_API_KEY}
-      - ALIENVAULT_POLLING_INTERVAL=3600
-      - CONNECTOR_RUN_AND_TERMINATE=false
     depends_on:
       opencti:
         condition: service_healthy

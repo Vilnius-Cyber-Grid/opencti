@@ -25,20 +25,19 @@ Based on:
 
 ### Connectors
 
-| Connector | Type | Source |
+| Connector | Type | Notable env vars |
 | --- | --- | --- |
-| MITRE ATT&CK | External Import | Docker Hub |
-| MISP | External Import | Docker Hub |
-| Shodan | External Import | Docker Hub |
-| ThreatFox | External Import | Docker Hub |
-| URLHaus | External Import | Docker Hub |
-| CISA KEV | External Import | Docker Hub |
-| AlienVault OTX | External Import | Docker Hub |
-| AbuseIPDB | External Import | Docker Hub |
-| MalwareBazaar | External Import | Docker Hub |
-| Export File STIX/CSV/TXT | Internal Export | Docker Hub |
-| Import File STIX / Document | Internal Import | Docker Hub |
-| Document Analysis | Internal Analysis | Docker Hub |
+| MITRE ATT&CK | External Import | — |
+| MISP | External Import | `MISP_URL`, `MISP_API_KEY` |
+| Shodan | External Import | `SHODAN_API_KEY` |
+| ThreatFox | External Import | `THREATFOX_API_URL`, `THREATFOX_IMPORT_IOC_TYPES` |
+| URLHaus | External Import | — |
+| CISA KEV | External Import | — |
+| AbuseIPDB | External Import | `ABUSEIPDB_API_KEY` |
+| MalwareBazaar | External Import | `MALWAREBAZAAR_API_KEY` |
+| Export File STIX/CSV/TXT | Internal Export | — |
+| Import File STIX / Document | Internal Import | — |
+| Document Analysis | Internal Analysis | — |
 
 ---
 
@@ -170,8 +169,9 @@ Work on a feature branch and open a pull request targeting `main`. All checks mu
 2. Set the required environment variables: `OPENCTI_URL`, `OPENCTI_TOKEN`, `CONNECTOR_ID`, `CONNECTOR_TYPE`, `CONNECTOR_NAME`, `CONNECTOR_SCOPE`, `CONNECTOR_CONFIDENCE_LEVEL`, `CONNECTOR_LOG_LEVEL`.
 3. Add `CONNECTOR_<NAME>_ID=` (and any API key variables) to `.env.example`.
 4. Add a `depends_on: opencti: condition: service_healthy` block.
-5. If a config file is needed, place it under `connectors/<name>/` and bind-mount it as `:ro`.
-6. Update the Connectors table in this README.
+5. Update the Connectors table in this README.
+
+> All current connectors are configured entirely via environment variables. A bind-mounted `connectors/<name>/config.yml` is only needed when a setting has no corresponding env var.
 
 ### Upgrading OpenCTI
 
