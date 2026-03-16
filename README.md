@@ -28,7 +28,7 @@ Based on:
 | Connector | Type | Notable env vars |
 | --- | --- | --- |
 | MITRE ATT&CK | External Import | — |
-| MISP | External Import | `MISP_URL`, `MISP_KEY` |
+| MISP | External Import | `MISP_URL`, `MISP_API_KEY` |
 | Shodan | External Import | `SHODAN_API_KEY` |
 | ThreatFox | External Import | `THREATFOX_API_URL`, `THREATFOX_IMPORT_IOC_TYPES` |
 | URLHaus | External Import | — |
