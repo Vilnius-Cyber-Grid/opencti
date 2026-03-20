@@ -1,6 +1,6 @@
 services:
   nginx:
-    image: nginx:latest
+    image: nginx:1.29.6-alpine-slim
     ports:
       - "80:80"
       - "443:443"
@@ -8,8 +8,9 @@ services:
       - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
       - ./docker/nginx/ssl:/etc/nginx/ssl:ro
     depends_on:
-      - opencti
-    restart: unless-stopped
+      opencti:
+        condition: service_healthy
+    restart: always
 
   rsa-key-generator:
     image: alpine/openssl:3.5.2

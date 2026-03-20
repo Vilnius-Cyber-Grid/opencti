@@ -32,7 +32,7 @@ jobs:
         uses: cuchi/jinja2-action@v1.3.0
         with:
           template: docker/templates/nginx/nginx-site.conf.j2
-          output_file: docker/nginx/workspace.conf
+          output_file: docker/nginx/nginx.conf
           strict: true
           variables: |
             domain_name="${{ vars.DOMAIN_NAME }}.${{ vars.VILNIUS_CYBER_GRID_DOMAIN }}"
