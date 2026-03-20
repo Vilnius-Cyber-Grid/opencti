@@ -23,6 +23,20 @@ jobs:
       - name: Pull images
         run: $COMPOSE pull
 
+      - name: Copy servers ssl certs
+        run: |
+          sudo cp ${{ secrets.SSL_CERT_PATH_UBUNTU_24 }} ${{ github.workspace }}/docker/nginx/ssl/cert.pem
+          sudo cp ${{ secrets.SSL_CERT_KEY_PATH_UBUNTU_24 }} ${{ github.workspace }}/docker/nginx/ssl/key.pem
+
+      - name: Prepare Nginx configuration
+        uses: cuchi/jinja2-action@v1.3.0
+        with:
+          template: docker/templates/nginx/nginx-site.conf.j2
+          output_file: docker/nginx/nginx.conf
+          strict: true
+          variables: |
+            domain_name="${{ vars.DOMAIN_NAME }}.${{ vars.VILNIUS_CYBER_GRID_DOMAIN }}"
+
       - name: Set .env file
         run: |
           cat << 'EOF' > .env
