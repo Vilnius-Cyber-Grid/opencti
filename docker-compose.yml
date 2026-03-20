@@ -1,4 +1,16 @@
 services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./docker/nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - opencti
+    restart: unless-stopped
+
   rsa-key-generator:
     image: alpine/openssl:3.5.2
     volumes:
