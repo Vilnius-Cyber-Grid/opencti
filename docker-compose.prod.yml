@@ -1,4 +1,16 @@
 services:
+  nginx:
+    image: nginx:1.29.6-alpine-slim
+    ports:
+      - "443:443"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./docker/nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      opencti:
+        condition: service_healthy
+    restart: always
+
   rsa-key-generator:
     image: alpine/openssl:3.5.2
     volumes:
@@ -135,8 +147,6 @@ services:
       - PROVIDERS__LDAP__CONFIG__REFERRALS=false
       # === HEALTHCHECK ===
       - APP__HEALTH_ACCESS_KEY=${OPENCTI_HEALTHCHECK_ACCESS_KEY}
-    ports:
-      - "8080:8080"
     depends_on:
       redis:
         condition: service_healthy
