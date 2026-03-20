@@ -12,10 +12,15 @@ jobs:
     name: Deploy
     runs-on: self-hosted
     env:
-      COMPOSE: docker compose -f docker-compose.yml
+      COMPOSE: docker compose -f docker-compose.prod.yml
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          sparse-checkout: |
+            docker/
+            docker-compose.prod.yml
+            .env.example
 
       - name: Show images compose will pull
         run: $COMPOSE config --images
