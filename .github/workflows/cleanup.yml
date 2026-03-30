@@ -26,6 +26,6 @@ jobs:
         run: |
           gh run list --repo ${{ github.repository }} --created "<${{ steps.cutoff.outputs.date }}" \
             --json databaseId -q '.[] | .databaseId' | \
-            xargs -I {} gh run delete {} --repo ${{ github.repository }} --confirm
+            xargs -I {} gh run delete {} --repo ${{ github.repository }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
