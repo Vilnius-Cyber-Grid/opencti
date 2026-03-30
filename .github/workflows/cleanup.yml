@@ -1,0 +1,29 @@
+name: cleanup
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    inputs:
+      days:
+        description: 'Retention in days'
+        required: false
+        default: '30'
+        type: string
+
+jobs:
+  delete-action-history:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+
+    steps:
+      - name: Calculate cutoff date
+        id: cutoff
+        run: echo "date=$(date -d '${{ github.event.inputs.days || 30 }} days ago' +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
+
+      - name: Delete old workflow runs
+        run: |
+          gh run list --created "<${{ steps.cutoff.outputs.date }}" --json databaseId -q '.[] | .databaseId' | xargs -I {} gh run delete {} --confirm
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
