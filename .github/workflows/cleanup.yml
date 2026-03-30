@@ -24,6 +24,8 @@ jobs:
 
       - name: Delete old workflow runs
         run: |
-          gh run list --created "<${{ steps.cutoff.outputs.date }}" --json databaseId -q '.[] | .databaseId' | xargs -I {} gh run delete {} --confirm
+          gh run list --repo ${{ github.repository }} --created "<${{ steps.cutoff.outputs.date }}" \
+            --json databaseId -q '.[] | .databaseId' | \
+            xargs -I {} gh run delete {} --repo ${{ github.repository }} --confirm
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
